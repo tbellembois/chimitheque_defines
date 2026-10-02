@@ -1,43 +1,68 @@
 use regex::Regex;
 use std::{collections::HashMap, sync::LazyLock};
 
+// =============================================
+// Regex Patterns for various identifiers and formats
+// =============================================
+
+/// Regular expression to match precautionary statements in the format "P[0-9+]\t[label]"
 pub static PRECAUTIONARY_STATEMENT_RE: std::sync::LazyLock<Regex> =
     std::sync::LazyLock::new(|| {
         Regex::new(r"(?P<reference>P[0-9+]+)(\t)(?P<label>[^\t]+)").unwrap()
     });
+
+/// Regular expression to match hazard statements in the format "(EU)?H[0-9]+\t[label]\t"
 pub static HAZARD_STATEMENT_RE: std::sync::LazyLock<Regex> = std::sync::LazyLock::new(|| {
     Regex::new(r"(?P<reference>(EU){0,1}H[0-9]+)(\t)(?P<label>[^\t]+)(\t)").unwrap()
 });
+
+/// Regular expression to match GHS symbols (GHS01 through GHS09)
 pub static SYMBOL_RE: std::sync::LazyLock<Regex> =
     std::sync::LazyLock::new(|| Regex::new(r"(?P<symbol>GHS0[1-9])").unwrap());
 
+/// Regular expression to validate comma-separated IDs format (e.g., "1,2,3")
 pub static IDS_MATCH_RE: std::sync::LazyLock<Regex> =
     std::sync::LazyLock::new(|| Regex::new(r"^((\d+),{0,1})+$").unwrap());
+/// Regular expression to capture individual IDs from comma-separated list
 pub static IDS_CAPTURE_RE: std::sync::LazyLock<Regex> =
     std::sync::LazyLock::new(|| Regex::new(r"(?<id>\d+),{0,1}").unwrap());
+/// Regular expression to capture ID from end of URL path
 pub static END_OF_URL_CAPTURE_RE: std::sync::LazyLock<Regex> =
     std::sync::LazyLock::new(|| Regex::new(r"/(?<id>\d+)$").unwrap());
 
+/// Regular expression to validate CAS registry numbers (format: XXXXXX-X-X)
 pub static CAS_NUMBER_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"^(?P<group1>[0-9]{2,7})-(?P<group2>[0-9]{2})-(?P<checkdigit>[0-9]{1})$").unwrap()
 });
+/// Regular expression to validate CE numbers (format: XXX-XXX-X)
 pub static CE_NUMBER_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"^(?P<group1>[0-9]{3})-(?P<group2>[0-9]{3})-(?P<checkdigit>[0-9]{1})$").unwrap()
 });
+/// Regular expression to match strings containing only zeros
 pub static ALL_ZERO_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^0+$").unwrap());
 
+/// Regular expression to match INCHI
 pub static INCHI_REGEX: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"^InChI=1[S]?/[A-Z0-9.+-]+(/c[0-9xX*(),-]+)?(/h[0-9hH,+-]+)?.*$").unwrap()
 });
+/// Regular expression to match INCHIKEY
 pub static INCHIKEY_REGEX: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^[A-Z]{14}-[A-Z]{9}[SN][A][A-Z]-[A-Z]$").unwrap());
+/// Regular expression to match canonical smiles
 pub static CANONICAL_SMILES_REGEX: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|\.|=|#|-[0-9]*|\+|\/|\\|:|@|\?|>|\*|\$|%[0-9]{2}|[0-9])").unwrap()
 });
 
+/// Regular expression to match storage barcode format (e.g., "Box1.1")
 pub static STORAGE_BARECODE_RE: std::sync::LazyLock<Regex> =
     std::sync::LazyLock::new(|| Regex::new(r"([_a-zA-Z]+[0-9]+)\.[0-9]+").unwrap());
 
+// =============================================
+// Periodic Table of Elements
+// =============================================
+
+/// HashMap containing element symbols as keys and their full names as values
+/// Note: Contains some misspellings (e.g., "berylium" instead of "beryllium")
 pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::new(|| {
     HashMap::from([
         ("Ac", "actinium"),
@@ -156,76 +181,83 @@ pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyL
     ])
 });
 
+/// Array of valid product tags/categories used for product classification and filtering
+/// Contains 54 predefined tags covering various scientific and laboratory use cases
+/// Tags include different cell culture types, antibodies, drugs, reagents, and specialized applications
 pub const TAGS: [&str; 54] = [
-    "3D Cell Culture",
-    "Acid",
-    "Antibody",
-    "Anticancer Drug",
-    "Antigen",
-    "Apoptose Inhibitor",
-    "Base",
-    "Buffer",
-    "Cell Counting",
-    "Cell Culture",
-    "Cell Culture Medium",
-    "Cell Staining",
-    "Cell Seeding",
-    "Cloning",
-    "Coating",
-    "Cryopreservation",
-    "Cryostorage",
-    "Dissociation Enzyme",
-    "Electrophoresis",
-    "ELISA",
-    "Enzyme",
-    "Flow Cytometry",
-    "Fluorescence",
-    "Fluorescent Probe",
-    "Growth Factor",
-    "IgG",
-    "IgG1",
-    "IgG2",
-    "IgG2a",
-    "IgM",
-    "Immucytochemistry",
-    "Immunofluorescence",
-    "iPS (Induced Pluripotent Stem Cell)",
-    "Isotypic Control",
-    "Messenchymal Stem Cell",
-    "Microscopy",
-    "Molecular Biology",
-    "Monoclonal",
-    "Nuclear Staining",
-    "PARP Inhibitor",
-    "PCR",
-    "Polyclonal",
-    "Primary Antibody",
-    "Protein",
-    "Recombinant Antibody",
-    "Recombinant Protein",
-    "Secondary Antibody",
-    "Sequencing",
-    "Solvent",
-    "Small Molecule",
-    "Spheroid",
-    "Stem Cell",
-    "Viability Test",
-    "Western Blot",
+    "3D Cell Culture",     // For 3-dimensional cell culture applications
+    "Acid",                // General acid category
+    "Antibody",            // General antibody category
+    "Anticancer Drug",     // Drugs specifically used for cancer treatment
+    "Antigen",             // Substances that induce immune response
+    "Apoptose Inhibitor",  // Compounds that inhibit programmed cell death
+    "Base",                // General base category
+    "Buffer",              // Solutions that resist pH changes
+    "Cell Counting",       // Reagents and tools for counting cells
+    "Cell Culture",        // General cell culture applications
+    "Cell Culture Medium", // Nutrient solutions for growing cells
+    "Cell Staining",       // Dyes and reagents for visualizing cells
+    "Cell Seeding",        // Techniques for plating cells
+    "Cloning",             // DNA cloning applications
+    "Coating",             // Surface treatments for cell culture
+    "Cryopreservation",    // Preservation of biological material at low temperatures
+    "Cryostorage",         // Storage of biological samples in cryogenic conditions
+    "Dissociation Enzyme", // Enzymes used to separate cells from tissue
+    "Electrophoresis",     // Technique for separating molecules by size/charge
+    "ELISA",               // Enzyme-linked immunosorbent assay technique
+    "Enzyme",              // General enzyme category
+    "Flow Cytometry",      // Technique for analyzing cells in suspension
+    "Fluorescence",        // Fluorescent labeling and detection
+    "Fluorescent Probe",   // Molecules that fluoresce for detection purposes
+    "Growth Factor",       // Proteins that stimulate cell growth/division
+    "IgG",                 // Immunoglobulin G antibodies
+    "IgG1",                // Subclass of IgG antibodies
+    "IgG2",                // Subclass of IgG antibodies
+    "IgG2a",               // Specific subclass of IgG antibodies
+    "IgM",                 // Immunoglobulin M antibodies
+    "Immucytochemistry",   // Immunocytochemistry techniques
+    "Immunofluorescence",  // Technique using fluorescent antibodies
+    "iPS (Induced Pluripotent Stem Cell)", // Stem cells derived from adult cells
+    "Isotypic Control",    // Control antibodies for flow cytometry
+    "Messenchymal Stem Cell", // Stem cells from mesenchymal tissue
+    "Microscopy",          // General microscopy applications
+    "Molecular Biology",   // Techniques for studying biological molecules
+    "Monoclonal",          // Monoclonal antibody category
+    "Nuclear Staining",    // Stains that target cell nuclei
+    "PARP Inhibitor",      // Inhibitors of poly(ADP-ribose) polymerase
+    "PCR",                 // Polymerase chain reaction technique
+    "Polyclonal",          // Polyclonal antibody category
+    "Primary Antibody",    // Antibodies used as first detection agents
+    "Protein",             // General protein category
+    "Recombinant Antibody", // Antibodies produced by genetic engineering
+    "Recombinant Protein", // Proteins produced by genetic engineering
+    "Secondary Antibody",  // Antibodies used for detection in assays
+    "Sequencing",          // DNA/RNA sequencing applications
+    "Solvent",             // General solvent category
+    "Small Molecule",      // Low molecular weight compounds
+    "Spheroid",            // 3D cell culture spheroid formation
+    "Stem Cell",           // General stem cell category
+    "Viability Test",      // Tests for cell viability
+    "Western Blot",        // Technique for detecting specific proteins
 ];
 
+/// Array of valid product categories used for product classification and filtering
+/// Contains 10 predefined categories covering major product types in the chemical and biological sciences
+/// Categories include antibodies, cell culture media, drugs, growth factors, and other specialized products
 pub const CATEGORIES: [&str; 10] = [
-    "Antibody",
-    "Cell Culture Medium & supplement",
-    "Drug",
-    "Cellular Growth Factor",
-    "Matrix / Coating",
-    "Comercial Kit",
-    "Fluorescent Probe",
-    "Cellular Viability Reagent",
-    "Cleaning Product",
-    "Maintenance, Calibration Reagent",
+    "Antibody",                         // Antibodies for research and diagnostic applications
+    "Cell Culture Medium & supplement", // Nutrient solutions and supplements for growing cells
+    "Drug",                             // Pharmaceutical compounds and therapeutic agents
+    "Cellular Growth Factor",           // Proteins that stimulate cell growth and division
+    "Matrix / Coating",                 // Surface treatments and coatings for cell culture
+    "Comercial Kit",                    // Pre-packaged assay and testing kits
+    "Fluorescent Probe",                // Molecules that fluoresce for detection purposes
+    "Cellular Viability Reagent",       // Compounds used to assess cell health and viability
+    "Cleaning Product",                 // Laboratory cleaning solutions and detergents
+    "Maintenance, Calibration Reagent", // Reagents for equipment maintenance and calibration
 ];
 
+/// Chemical products suppliers.
 pub const SUPPLIERS: [&str; 45] = [
     "Abcam",
     "Acros Organics",
@@ -274,6 +306,7 @@ pub const SUPPLIERS: [&str; 45] = [
     "VWR",
 ];
 
+/// Chemical products producers.
 pub const PRODUCERS: [&str; 38] = [
     "Abcam",
     "Acros Organics",
@@ -315,14 +348,18 @@ pub const PRODUCERS: [&str; 38] = [
     "Trevigen",
 ];
 
+/// Array of valid GHS signal words
 pub const SIGNAL_WORDS: [&str; 2] = ["danger", "warning"];
 
+/// Array of valid physical states
 pub const PHYSICAL_STATES: [&str; 3] = ["gaz", "liquid", "solid"];
 
+/// Array of valid GHS symbols
 pub const SYMBOLS: [&str; 9] = [
     "GHS01", "GHS02", "GHS03", "GHS04", "GHS05", "GHS06", "GHS07", "GHS08", "GHS09",
 ];
 
+/// Array of valid chemical compound classes
 pub const CLASSES_OF_COMPOUNDS: [&str; 206] = [
     "acetal",
     "acetophenone",
@@ -532,6 +569,12 @@ pub const CLASSES_OF_COMPOUNDS: [&str; 206] = [
     "zirconium",
 ];
 
+// =============================================
+// Unit Conversions
+// =============================================
+
+/// Array of unit definitions with conversion factors
+/// Each tuple contains: (id, unit_name, conversion_factor, unit_type, base_unit_id)
 pub static UNITS: [(&i8, &str, &f64, &str, Option<i8>); 23] = [
     (&1, "L", &1.0, "quantity", None),
     (&2, "mL", &0.001, "quantity", Some(1)),
@@ -558,6 +601,16 @@ pub static UNITS: [(&i8, &str, &f64, &str, Option<i8>); 23] = [
     (&24, "g/mol", &1.0, "molecular_weight", None),
 ];
 
+// =============================================
+// CMR (Carcinogenic, Mutagenic, Reproductive toxic) Substances
+// =============================================
+
+/// Array mapping CAS numbers to CMR classifications
+/// Format: (CAS_number, CMR_classification)
+/// CMR classifications use codes: C1A (Category 1A), C1B (Category 1B),
+/// C2 (Category 2), M1B (Category 1B Mutagen), M2 (Category 2 Mutagen),
+/// R1A (Category 1A Reproductive), R1B (Category 1B Reproductive),
+/// R2 (Category 2 Reproductive), LACT (Lactation)
 pub static CMR_CAS: [(&str, &str); 1473] = [
     ("100-00-5", "C2 M2"),
     ("100-40-3", "C2"),

@@ -184,7 +184,7 @@ pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyL
 /// Array of valid product tags/categories used for product classification and filtering
 /// Contains 54 predefined tags covering various scientific and laboratory use cases
 /// Tags include different cell culture types, antibodies, drugs, reagents, and specialized applications
-pub const TAGS: [&str; 54] = [
+pub static TAGS: [&str; 54] = [
     "3D Cell Culture",     // For 3-dimensional cell culture applications
     "Acid",                // General acid category
     "Antibody",            // General antibody category
@@ -244,7 +244,7 @@ pub const TAGS: [&str; 54] = [
 /// Array of valid product categories used for product classification and filtering
 /// Contains 10 predefined categories covering major product types in the chemical and biological sciences
 /// Categories include antibodies, cell culture media, drugs, growth factors, and other specialized products
-pub const CATEGORIES: [&str; 10] = [
+pub static CATEGORIES: [&str; 10] = [
     "Antibody",                         // Antibodies for research and diagnostic applications
     "Cell Culture Medium & supplement", // Nutrient solutions and supplements for growing cells
     "Drug",                             // Pharmaceutical compounds and therapeutic agents
@@ -258,7 +258,7 @@ pub const CATEGORIES: [&str; 10] = [
 ];
 
 /// Chemical products suppliers.
-pub const SUPPLIERS: [&str; 45] = [
+pub static SUPPLIERS: [&str; 45] = [
     "Abcam",
     "Acros Organics",
     "Ajinomoto",
@@ -307,7 +307,7 @@ pub const SUPPLIERS: [&str; 45] = [
 ];
 
 /// Chemical products producers.
-pub const PRODUCERS: [&str; 38] = [
+pub static PRODUCERS: [&str; 38] = [
     "Abcam",
     "Acros Organics",
     "Ajinomoto",
@@ -349,18 +349,18 @@ pub const PRODUCERS: [&str; 38] = [
 ];
 
 /// Array of valid GHS signal words
-pub const SIGNAL_WORDS: [&str; 2] = ["danger", "warning"];
+pub static SIGNAL_WORDS: [&str; 2] = ["danger", "warning"];
 
 /// Array of valid physical states
-pub const PHYSICAL_STATES: [&str; 3] = ["gaz", "liquid", "solid"];
+pub static PHYSICAL_STATES: [&str; 3] = ["gaz", "liquid", "solid"];
 
 /// Array of valid GHS symbols
-pub const SYMBOLS: [&str; 9] = [
+pub static SYMBOLS: [&str; 9] = [
     "GHS01", "GHS02", "GHS03", "GHS04", "GHS05", "GHS06", "GHS07", "GHS08", "GHS09",
 ];
 
 /// Array of valid chemical compound classes
-pub const CLASSES_OF_COMPOUNDS: [&str; 206] = [
+pub static CLASSES_OF_COMPOUNDS: [&str; 206] = [
     "acetal",
     "acetophenone",
     "acid",

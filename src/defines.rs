@@ -1,4 +1,4 @@
-use regex::Regex;
+use lazy_regex::{Lazy, Regex, regex};
 use std::{collections::HashMap, sync::LazyLock};
 
 // =============================================
@@ -6,62 +6,50 @@ use std::{collections::HashMap, sync::LazyLock};
 // =============================================
 
 /// Regular expression to match precautionary statements in the format "P[0-9+]\t[label]"
-pub static PRECAUTIONARY_STATEMENT_RE: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| {
-        Regex::new(r"(?P<reference>P[0-9+]+)(\t)(?P<label>[^\t]+)").unwrap()
-    });
+pub static PRECAUTIONARY_STATEMENT_RE: &Lazy<Regex> =
+    regex!(r"(?P<reference>P[0-9+]+)(\t)(?P<label>[^\t]+)");
 
 /// Regular expression to match hazard statements in the format "(EU)?H[0-9]+\t[label]\t"
-pub static HAZARD_STATEMENT_RE: std::sync::LazyLock<Regex> = std::sync::LazyLock::new(|| {
-    Regex::new(r"(?P<reference>(EU){0,1}H[0-9]+)(\t)(?P<label>[^\t]+)(\t)").unwrap()
-});
+pub static HAZARD_STATEMENT_RE: &Lazy<Regex> =
+    regex!(r"(?P<reference>(EU){0,1}H[0-9]+)(\t)(?P<label>[^\t]+)(\t)");
 
 /// Regular expression to match GHS symbols (GHS01 through GHS09)
-pub static SYMBOL_RE: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| Regex::new(r"(?P<symbol>GHS0[1-9])").unwrap());
+pub static SYMBOL_RE: &Lazy<Regex> = regex!(r"(?P<symbol>GHS0[1-9])");
 
 /// Regular expression to validate comma-separated IDs format (e.g., "1,2,3")
-pub static IDS_MATCH_RE: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| Regex::new(r"^((\d+),{0,1})+$").unwrap());
+pub static IDS_MATCH_RE: &Lazy<Regex> = regex!(r"^((\d+),{0,1})+$");
 /// Regular expression to capture individual IDs from comma-separated list
-pub static IDS_CAPTURE_RE: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| Regex::new(r"(?<id>\d+),{0,1}").unwrap());
+pub static IDS_CAPTURE_RE: &Lazy<Regex> = regex!(r"(?<id>\d+),{0,1}");
 /// Regular expression to capture ID from end of URL path
-pub static END_OF_URL_CAPTURE_RE: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| Regex::new(r"/(?<id>\d+)$").unwrap());
+pub static END_OF_URL_CAPTURE_RE: &Lazy<Regex> = regex!(r"/(?<id>\d+)$");
 
 /// Regular expression to validate CAS registry numbers (format: XXXXXX-X-X)
-pub static CAS_NUMBER_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^(?P<group1>[0-9]{2,7})-(?P<group2>[0-9]{2})-(?P<checkdigit>[0-9]{1})$").unwrap()
-});
+pub static CAS_NUMBER_RE: &Lazy<Regex> =
+    regex!(r"^(?P<group1>[0-9]{2,7})-(?P<group2>[0-9]{2})-(?P<checkdigit>[0-9]{1})$");
 /// Regular expression to validate CE numbers (format: XXX-XXX-X)
-pub static CE_NUMBER_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^(?P<group1>[0-9]{3})-(?P<group2>[0-9]{3})-(?P<checkdigit>[0-9]{1})$").unwrap()
-});
+pub static CE_NUMBER_RE: &Lazy<Regex> =
+    regex!(r"^(?P<group1>[0-9]{3})-(?P<group2>[0-9]{3})-(?P<checkdigit>[0-9]{1})$");
 /// Regular expression to match strings containing only zeros
-pub static ALL_ZERO_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^0+$").unwrap());
+pub static ALL_ZERO_RE: &Lazy<Regex> = regex!(r"^0+$");
 
 /// Regular expression to match INCHI
-pub static INCHI_REGEX: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^InChI=1[S]?/[A-Z0-9.+-]+(/c[0-9xX*(),-]+)?(/h[0-9hH,+-]+)?.*$").unwrap()
-});
+pub static INCHI_REGEX: &Lazy<Regex> =
+    regex!(r"^InChI=1[S]?/[A-Z0-9.+-]+(/c[0-9xX*(),-]+)?(/h[0-9hH,+-]+)?.*$");
 /// Regular expression to match INCHIKEY
-pub static INCHIKEY_REGEX: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^[A-Z]{14}-[A-Z]{9}[SN][A][A-Z]-[A-Z]$").unwrap());
+pub static INCHIKEY_REGEX: &Lazy<Regex> = regex!(r"^[A-Z]{14}-[A-Z]{9}[SN][A][A-Z]-[A-Z]$");
 /// Regular expression to match canonical smiles
-pub static CANONICAL_SMILES_REGEX: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|\.|=|#|-[0-9]*|\+|\/|\\|:|@|\?|>|\*|\$|%[0-9]{2}|[0-9])").unwrap()
-});
+pub static CANONICAL_SMILES_REGEX: &Lazy<Regex> = regex!(
+    r"(\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|\.|=|#|-[0-9]*|\+|\/|\\|:|@|\?|>|\*|\$|%[0-9]{2}|[0-9])"
+);
 
 /// Regular expression to match storage barcode format (e.g., "Box1.1")
-pub static STORAGE_BARECODE_RE: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| Regex::new(r"([_a-zA-Z]+[0-9]+)\.[0-9]+").unwrap());
+pub static STORAGE_BARECODE_RE: &Lazy<Regex> = regex!(r"([_a-zA-Z]+[0-9]+)\.[0-9]+");
 
 // =============================================
 // Periodic Table of Elements
 // =============================================
 
-/// HashMap containing element symbols as keys and their full names as values
+/// `HashMap` containing element symbols as keys and their full names as values
 /// Note: Contains some misspellings (e.g., "berylium" instead of "beryllium")
 pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::new(|| {
     HashMap::from([
@@ -574,7 +562,7 @@ pub static CLASSES_OF_COMPOUNDS: [&str; 206] = [
 // =============================================
 
 /// Array of unit definitions with conversion factors
-/// Each tuple contains: (id, unit_name, conversion_factor, unit_type, base_unit_id)
+/// Each tuple contains: (`id`, `unit_name`, `conversion_factor`, `unit_type`, `base_unit_id`)
 pub static UNITS: [(&i8, &str, &f64, &str, Option<i8>); 23] = [
     (&1, "L", &1.0, "quantity", None),
     (&2, "mL", &0.001, "quantity", Some(1)),
@@ -606,7 +594,7 @@ pub static UNITS: [(&i8, &str, &f64, &str, Option<i8>); 23] = [
 // =============================================
 
 /// Array mapping CAS numbers to CMR classifications
-/// Format: (CAS_number, CMR_classification)
+/// Format: (`CAS_number`, `CMR_classification`)
 /// CMR classifications use codes: C1A (Category 1A), C1B (Category 1B),
 /// C2 (Category 2), M1B (Category 1B Mutagen), M2 (Category 2 Mutagen),
 /// R1A (Category 1A Reproductive), R1B (Category 1B Reproductive),

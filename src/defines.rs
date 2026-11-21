@@ -36,7 +36,9 @@ pub static ALL_ZERO_RE: &Lazy<Regex> = regex!(r"^0+$");
 pub static INCHI_REGEX: &Lazy<Regex> =
     regex!(r"^InChI=1[S]?/[A-Z0-9.+-]+(/c[0-9xX*(),-]+)?(/h[0-9hH,+-]+)?.*$");
 /// Regular expression to match INCHIKEY
-pub static INCHIKEY_REGEX: &Lazy<Regex> = regex!(r"^[A-Z]{14}-[A-Z]{9}[SN][A][A-Z]-[A-Z]$");
+/// 14 letters, 8 letters followed by the standard flag (S or N) and version (A),
+/// then the protonation letter, e.g. `LFQSCWFLJHTTHZ-UHFFFAOYSA-N`.
+pub static INCHIKEY_REGEX: &Lazy<Regex> = regex!(r"^[A-Z]{14}-[A-Z]{8}[SN]A-[A-Z]$");
 /// Regular expression to match canonical smiles
 pub static CANONICAL_SMILES_REGEX: &Lazy<Regex> = regex!(
     r"(\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|\.|=|#|-[0-9]*|\+|\/|\\|:|@|\?|>|\*|\$|%[0-9]{2}|[0-9])"

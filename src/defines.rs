@@ -343,7 +343,7 @@ pub static PRODUCERS: [&str; 38] = [
 pub static SIGNAL_WORDS: [&str; 2] = ["danger", "warning"];
 
 /// Array of valid physical states
-pub static PHYSICAL_STATES: [&str; 3] = ["gaz", "liquid", "solid"];
+pub static PHYSICAL_STATES: [&str; 3] = ["gas", "liquid", "solid"];
 
 /// Array of valid GHS symbols
 pub static SYMBOLS: [&str; 9] = [

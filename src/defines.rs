@@ -39,10 +39,6 @@ pub static INCHI_REGEX: &Lazy<Regex> =
 /// 14 letters, 8 letters followed by the standard flag (S or N) and version (A),
 /// then the protonation letter, e.g. `LFQSCWFLJHTTHZ-UHFFFAOYSA-N`.
 pub static INCHIKEY_REGEX: &Lazy<Regex> = regex!(r"^[A-Z]{14}-[A-Z]{8}[SN]A-[A-Z]$");
-/// Regular expression to match canonical smiles
-pub static CANONICAL_SMILES_REGEX: &Lazy<Regex> = regex!(
-    r"(\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|\.|=|#|-[0-9]*|\+|\/|\\|:|@|\?|>|\*|\$|%[0-9]{2}|[0-9])"
-);
 
 /// Regular expression to match storage barcode format (e.g., "Box1.1")
 pub static STORAGE_BARECODE_RE: &Lazy<Regex> = regex!(r"([_a-zA-Z]+[0-9]+)\.[0-9]+");

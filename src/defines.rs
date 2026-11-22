@@ -2,6 +2,17 @@ use lazy_regex::{Lazy, Regex, regex};
 use std::{collections::HashMap, sync::LazyLock};
 
 // =============================================
+// HTTP headers
+// =============================================
+
+/// HTTP header carrying the id of a request, for the logs.
+pub const REQUEST_ID_HEADER: &str = "x-request-id";
+/// HTTP header carrying the Chimithèque id of the connected person.
+pub const CHIMITHEQUE_PERSON_ID_HEADER: &str = "x-chimitheque-person-id";
+/// HTTP header carrying the email of the connected person.
+pub const CHIMITHEQUE_PERSON_EMAIL_HEADER: &str = "x-chimitheque-person-email";
+
+// =============================================
 // Regex Patterns for various identifiers and formats
 // =============================================
 

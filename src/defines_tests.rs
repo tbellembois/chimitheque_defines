@@ -285,4 +285,19 @@ mod tests {
             assert!(!HTML_COLOR_RE.is_match(color), "{color}");
         }
     }
+
+    #[test]
+    fn test_http_header_names() {
+        // HTTP/2 requires lowercase header names.
+        for header in [
+            REQUEST_ID_HEADER,
+            CHIMITHEQUE_PERSON_ID_HEADER,
+            CHIMITHEQUE_PERSON_EMAIL_HEADER,
+        ] {
+            assert!(
+                header.chars().all(|c| c.is_ascii_lowercase() || c == '-'),
+                "{header}"
+            );
+        }
+    }
 }

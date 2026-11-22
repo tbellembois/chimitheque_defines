@@ -29,6 +29,7 @@ Before implementing new functionality, inspect existing types and their tests to
 - Add comments for complex or non-obvious logic rather than commenting every line.
 - Follow the existing serialization and deserialization conventions.
 - Keep implementations consistent with similar types already present in the crate.
+- All the shared data of the Chimithèque crates (regular expressions, code lists, reference data, HTTP header names) belongs in this crate, as constants or statics. Write them like the existing ones (`lazy_regex::regex!` for regular expressions) and test them in defines_tests.rs. Runtime state and settings specific to one crate (e.g. user interface styles) stay in that crate.
 
 ## Testing
 

@@ -54,7 +54,6 @@ pub static STORAGE_BARECODE_RE: &Lazy<Regex> = regex!(r"([_a-zA-Z]+[0-9]+)\.[0-9
 // =============================================
 
 /// `HashMap` containing element symbols as keys and their full names as values
-/// Note: Contains some misspellings (e.g., "berylium" instead of "beryllium")
 pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::new(|| {
     HashMap::from([
         ("Ac", "actinium"),
@@ -67,7 +66,7 @@ pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyL
         ("Au", "gold"),
         ("B", "boron"),
         ("Ba", "barium"),
-        ("Be", "berylium"),
+        ("Be", "beryllium"),
         ("Bh", "bohrium"),
         ("Bi", "bismuth"),
         ("Bk", "berkelium"),
@@ -79,7 +78,7 @@ pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyL
         ("Cf", "californium"),
         ("Cl", "chlorine"),
         ("Cm", "curium"),
-        ("Cn", "copemicium"),
+        ("Cn", "copernicium"),
         ("Co", "cobalt"),
         ("Cr", "chromium"),
         ("Cs", "caesium"),
@@ -135,7 +134,7 @@ pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyL
         ("Pm", "promethium"),
         ("Po", "polonium"),
         ("Pr", "praseodymium"),
-        ("Pt", "platinium"),
+        ("Pt", "platinum"),
         ("Pu", "plutonium"),
         ("Ra", "radium"),
         ("Rb", "rubidium"),
@@ -145,10 +144,10 @@ pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyL
         ("Rh", "rhodium"),
         ("Rn", "radon"),
         ("Ru", "ruthenium"),
-        ("S", "sulfure"),
+        ("S", "sulfur"),
         ("Sb", "antimony"),
         ("Sc", "scandium"),
-        ("Se", "sefeniuo"),
+        ("Se", "selenium"),
         ("Sg", "seaborgium"),
         ("Si", "silicon"),
         ("Sm", "samarium"),
@@ -166,7 +165,7 @@ pub static PERIODIC_TABLE: LazyLock<HashMap<&'static str, &'static str>> = LazyL
         ("V", "vanadium"),
         ("W", "tungsten"),
         ("Xe", "xenon"),
-        ("Y", "yltrium"),
+        ("Y", "yttrium"),
         ("Yb", "ytterbium"),
         ("Zn", "zinc"),
         ("Zr", "zirconium"),
@@ -242,7 +241,7 @@ pub static CATEGORIES: [&str; 10] = [
     "Drug",                             // Pharmaceutical compounds and therapeutic agents
     "Cellular Growth Factor",           // Proteins that stimulate cell growth and division
     "Matrix / Coating",                 // Surface treatments and coatings for cell culture
-    "Comercial Kit",                    // Pre-packaged assay and testing kits
+    "Commercial Kit",                   // Pre-packaged assay and testing kits
     "Fluorescent Probe",                // Molecules that fluoresce for detection purposes
     "Cellular Viability Reagent",       // Compounds used to assess cell health and viability
     "Cleaning Product",                 // Laboratory cleaning solutions and detergents

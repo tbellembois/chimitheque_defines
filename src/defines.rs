@@ -605,7 +605,7 @@ pub static UNITS: [(&i8, &str, &f64, &str, Option<i8>); 23] = [
 /// C2 (Category 2), M1B (Category 1B Mutagen), M2 (Category 2 Mutagen),
 /// R1A (Category 1A Reproductive), R1B (Category 1B Reproductive),
 /// R2 (Category 2 Reproductive), LACT (Lactation)
-pub static CMR_CAS: [(&str, &str); 1473] = [
+pub static CMR_CAS: [(&str, &str); 1472] = [
     ("100-00-5", "C2 M2"),
     ("100-40-3", "C2"),
     ("100-42-5", "R2"),
@@ -970,7 +970,6 @@ pub static CMR_CAS: [(&str, &str); 1473] = [
     ("1937-37-7", "C1B R2"),
     ("19372-20-4", "C1A"),
     ("19398-06-2", "C2"),
-    ("194-55-6", "R2 LACT"),
     ("1951-97-9", "R2"),
     ("19750-95-9", "C2"),
     ("19900-65-3", "C2"),
@@ -1569,7 +1568,7 @@ pub static CMR_CAS: [(&str, &str); 1473] = [
     ("68919-05-1", "C1A M1B"),
     ("68919-06-2", "C1A M1B"),
     ("68919-07-3", "C1A M1B"),
-    ("68919-08-4", "C1a M1B"),
+    ("68919-08-4", "C1A M1B"),
     ("68919-09-5", "C1A M1B"),
     ("68919-10-8", "C1A M1B"),
     ("68919-11-9", "C1A M1B"),

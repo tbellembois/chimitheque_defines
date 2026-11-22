@@ -5,13 +5,19 @@ use std::{collections::HashMap, sync::LazyLock};
 // Regex Patterns for various identifiers and formats
 // =============================================
 
-/// Regular expression to match precautionary statements in the format "P[0-9+]\t[label]"
+/// Regular expression to match a precautionary statement line of the GHS
+/// file: the `reference`, a tab and the `label`. The reference may combine
+/// codes, with an optional last one in brackets, e.g. `P301+P310` or
+/// `P370+P380+P375[+P378]`.
 pub static PRECAUTIONARY_STATEMENT_RE: &Lazy<Regex> =
-    regex!(r"(?P<reference>P[0-9+]+)(\t)(?P<label>[^\t]+)");
+    regex!(r"^(?P<reference>P[0-9]{3}(?:\+P[0-9]{3})*(?:\[\+P[0-9]{3}\])?)\t(?P<label>[^\t]+)");
 
-/// Regular expression to match hazard statements in the format "(EU)?H[0-9]+\t[label]\t"
-pub static HAZARD_STATEMENT_RE: &Lazy<Regex> =
-    regex!(r"(?P<reference>(EU){0,1}H[0-9]+)(\t)(?P<label>[^\t]+)(\t)");
+/// Regular expression to match a hazard statement line of the GHS file: the
+/// `reference`, a tab, the `label` and a tab. The reference may have a suffix
+/// and combine codes, e.g. `H350i`, `H360FD` or `H300+H310+H330`.
+pub static HAZARD_STATEMENT_RE: &Lazy<Regex> = regex!(
+    r"^(?P<reference>(?:EU)?H[0-9]{3}[A-Za-z]{0,2}(?:\+(?:EU)?H[0-9]{3}[A-Za-z]{0,2})*)\t(?P<label>[^\t]+)\t"
+);
 
 /// Regular expression to match GHS symbols (GHS01 through GHS09)
 pub static SYMBOL_RE: &Lazy<Regex> = regex!(r"(?P<symbol>GHS0[1-9])");
@@ -2075,3 +2081,7 @@ pub static CMR_CAS: [(&str, &str); 1472] = [
     ("99464-83-2", "M2"),
     ("99610-72-7", "R2"),
 ];
+
+#[cfg(test)]
+#[path = "defines_tests.rs"]
+mod defines_tests;

@@ -565,6 +565,10 @@ pub static CLASSES_OF_COMPOUNDS: [&str; 206] = [
 
 /// Array of unit definitions with conversion factors
 /// Each tuple contains: (`id`, `unit_name`, `conversion_factor`, `unit_type`, `base_unit_id`)
+///
+/// One unit equals `conversion_factor` base units, e.g. 1 mL = 0.001 L. Stock
+/// totals are computed with these factors. Temperatures can not be converted
+/// with a factor: their factors are not used in computations.
 pub static UNITS: [(&i8, &str, &f64, &str, Option<i8>); 23] = [
     (&1, "L", &1.0, "quantity", None),
     (&2, "mL", &0.001, "quantity", Some(1)),
@@ -574,9 +578,9 @@ pub static UNITS: [(&i8, &str, &f64, &str, Option<i8>); 23] = [
     (&7, "mg", &0.001, "quantity", Some(4)),
     (&8, "µg", &1.0e-06, "quantity", Some(4)),
     (&9, "m", &1.0, "quantity", None),
-    (&10, "dm", &10.0, "quantity", Some(9)),
-    (&11, "cm", &100.0, "quantity", Some(9)),
-    (&12, "°K", &1.0, "temperature", None),
+    (&10, "dm", &0.1, "quantity", Some(9)),
+    (&11, "cm", &0.01, "quantity", Some(9)),
+    (&12, "K", &1.0, "temperature", None),
     (&13, "°F", &255.928, "temperature", Some(12)),
     (&14, "°C", &274.15, "temperature", Some(12)),
     (&15, "mM", &1.0, "concentration", None),

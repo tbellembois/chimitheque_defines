@@ -19,6 +19,32 @@ pub static HAZARD_STATEMENT_RE: &Lazy<Regex> = regex!(
     r"^(?P<reference>(?:EU)?H[0-9]{3}[A-Za-z]{0,2}(?:\+(?:EU)?H[0-9]{3}[A-Za-z]{0,2})*)\t(?P<label>[^\t]+)\t"
 );
 
+/// Regular expression to validate a GHS hazard statement reference: the
+/// reference part of [`HAZARD_STATEMENT_RE`], e.g. `H350i` or `H300+H310`.
+pub static HAZARD_REFERENCE_RE: &Lazy<Regex> =
+    regex!(r"^(?:EU)?H[0-9]{3}[A-Za-z]{0,2}(?:\+(?:EU)?H[0-9]{3}[A-Za-z]{0,2})*$");
+
+/// Regular expression to validate a GHS precautionary statement reference: the
+/// reference part of [`PRECAUTIONARY_STATEMENT_RE`], e.g. `P280` or
+/// `P301+P330+P331[+P310]`.
+pub static PRECAUTIONARY_REFERENCE_RE: &Lazy<Regex> =
+    regex!(r"^P[0-9]{3}(?:\+P[0-9]{3})*(?:\[\+P[0-9]{3}\])?$");
+
+/// Regular expression to find GHS hazard codes in `PubChem` prose, e.g.
+/// `H302` or `H300 + H310`. Unlike [`HAZARD_REFERENCE_RE`], the codes are not
+/// anchored and may have spaces around `+`.
+pub static PUBCHEM_HAZARD_CODE_RE: &Lazy<Regex> = regex!(
+    r"(?-u)\b(?:EU)?H[0-9]{3}[A-Za-z]{0,2}(?:[ \t]*\+[ \t]*(?:EU)?H[0-9]{3}[A-Za-z]{0,2})*\b"
+);
+
+/// Regular expression to find GHS precautionary codes in `PubChem` prose, e.g.
+/// `P280` or `P301 + P310`.
+pub static PUBCHEM_PRECAUTIONARY_CODE_RE: &Lazy<Regex> =
+    regex!(r"(?-u)\bP[0-9]{3}(?:[ \t]*\+[ \t]*P[0-9]{3})*\b");
+
+/// Regular expression to validate an HTML color, e.g. `#ff0000`.
+pub static HTML_COLOR_RE: &Lazy<Regex> = regex!(r"^#[0-9A-Fa-f]{6}$");
+
 /// Regular expression to match GHS symbols (GHS01 through GHS09)
 pub static SYMBOL_RE: &Lazy<Regex> = regex!(r"(?P<symbol>GHS0[1-9])");
 
@@ -599,6 +625,12 @@ pub static UNITS: [(&i8, &str, &f64, &str, Option<i8>); 23] = [
 // =============================================
 // CMR (Carcinogenic, Mutagenic, Reproductive toxic) Substances
 // =============================================
+
+/// CMR (carcinogenic, mutagenic, reprotoxic) classification codes, as used in
+/// [`CMR_CAS`].
+pub static CMR_CODES: [&str; 10] = [
+    "C1A", "C1B", "C2", "M1A", "M1B", "M2", "R1A", "R1B", "R2", "LACT",
+];
 
 /// Array mapping CAS numbers to CMR classifications
 /// Format: (`CAS_number`, `CMR_classification`)

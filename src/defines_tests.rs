@@ -64,9 +64,7 @@ mod tests {
 
     #[test]
     fn test_cmr_cas_entries_are_valid() {
-        let codes = [
-            "C1A", "C1B", "C2", "M1A", "M1B", "M2", "R1A", "R1B", "R2", "LACT",
-        ];
+        let codes = CMR_CODES;
         let mut seen = HashSet::new();
         for (cas, classification) in CMR_CAS {
             assert!(CAS_NUMBER_RE.is_match(cas), "{cas}: format");
@@ -213,5 +211,78 @@ mod tests {
             .map(|captures| captures.get(1).unwrap().as_str())
             .collect();
         assert_eq!(prefixes, ["P3514", "P3514", "Box12"]);
+    }
+
+    #[test]
+    fn test_reference_regexes_match_the_ghs_file_regexes() {
+        // A reference is valid iff the GHS file line regex accepts it.
+        for reference in [
+            "H350",
+            "H350i",
+            "H360FD",
+            "EUH014",
+            "H300+H310+H330",
+            "H315+319",
+            "H35",
+            "h350",
+        ] {
+            assert_eq!(
+                HAZARD_REFERENCE_RE.is_match(reference),
+                HAZARD_STATEMENT_RE.is_match(&format!("{reference}\tlabel\t")),
+                "{reference}"
+            );
+        }
+        for reference in [
+            "P280",
+            "P301+P310",
+            "P370+P380+P375[+P378]",
+            "P30",
+            "P301+",
+            "p280",
+        ] {
+            assert_eq!(
+                PRECAUTIONARY_REFERENCE_RE.is_match(reference),
+                PRECAUTIONARY_STATEMENT_RE.is_match(&format!("{reference}\tlabel")),
+                "{reference}"
+            );
+        }
+        assert!(HAZARD_REFERENCE_RE.is_match("H300+H310"));
+        assert!(!HAZARD_REFERENCE_RE.is_match("H300 H310"));
+        assert!(PRECAUTIONARY_REFERENCE_RE.is_match("P301+P330+P331[+P310]"));
+    }
+
+    #[test]
+    fn test_pubchem_code_regexes() {
+        let codes = |regex: &Regex, text: &str| -> Vec<String> {
+            regex
+                .find_iter(text)
+                .map(|code| code.as_str().to_string())
+                .collect()
+        };
+
+        assert_eq!(
+            codes(
+                PUBCHEM_HAZARD_CODE_RE,
+                "H302 (100%): Harmful; H300 + H310 and EUH014."
+            ),
+            ["H302", "H300 + H310", "EUH014"]
+        );
+        assert_eq!(
+            codes(
+                PUBCHEM_PRECAUTIONARY_CODE_RE,
+                "P280, P301+P310 and P305 + P351."
+            ),
+            ["P280", "P301+P310", "P305 + P351"]
+        );
+        // Not a code inside a word.
+        assert_eq!(codes(PUBCHEM_HAZARD_CODE_RE, "XH302").len(), 0);
+    }
+
+    #[test]
+    fn test_html_color_regex() {
+        assert!(HTML_COLOR_RE.is_match("#ff00AA"));
+        for color in ["ff0000", "#ff00", "#gg0000", "#ff0000 "] {
+            assert!(!HTML_COLOR_RE.is_match(color), "{color}");
+        }
     }
 }

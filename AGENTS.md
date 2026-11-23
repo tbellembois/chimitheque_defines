@@ -1,72 +1,8 @@
 # AGENTS.md - Chimithèque Defines Library Agent Guide
 
-## Overview
+First read and follow the global instructions in the [`AGENTS.md`](../chimitheque/AGENTS.md) file.
 
-This `rust` crate is a library of constants used in a chemical products, biological reagents and laboratory consumables management application.\
-
-- Check Cargo.toml to understand the project dependencies.
-
-Before implementing new functionality, inspect existing types and their tests to understand the project's conventions and patterns.
-
-## General instructions
-
-- Prefer simple, readable, and maintainable code over premature optimization or unnecessary features.
-- Follow existing project conventions and code organization.
-- Avoid unnecessary abstractions, dependencies, and code duplication.
-- Do not modify unrelated code.
-- Preserve existing public APIs unless the task explicitly requires changing them.
-- Do not introduce breaking changes without explicit authorization.
-- Do not assume requirements that are not specified. Ask for clarification when necessary.
-
-## Rust specific guidelines
-
-- Follow idiomatic Rust conventions.
-- Use appropriate Rust types and avoid unnecessary allocations and cloning.
-- Handle errors explicitly.
-- Avoid unwrap() and expect() in production code unless there is a clear justification.
-- Prefer existing dependencies over introducing new ones.
-- Document public types, traits, and functions.
-- Add comments for complex or non-obvious logic rather than commenting every line.
-- Follow the existing serialization and deserialization conventions.
-- Keep implementations consistent with similar types already present in the crate.
-- All the shared data of the Chimithèque crates (regular expressions, code lists, reference data, HTTP header names) belongs in this crate, as constants or statics. Write them like the existing ones (`lazy_regex::regex!` for regular expressions) and test them in defines_tests.rs. Runtime state and settings specific to one crate (e.g. user interface styles) stay in that crate.
-
-## Testing
-
-- Each type should have its corresponding _tests.rs file.
-- Update existing tests when modifying a type.
-- Add unit tests for new functionality and relevant edge cases.
-- Test serialization and deserialization when applicable.
-- Run the relevant tests after making changes.
-- Run the complete test suite before considering a task finished.
-
-Recommended validation commands:
-
-- cargo test
-- cargo fmt --check
-- cargo clippy
-
-Report any tests or validation commands that could not be executed
-
-## RTK Instructions
-
-When executing terminal commands, prefer RTK to reduce unnecessary command output and token consumption.
-
-Use RTK equivalents whenever available.
-
-Examples:
-
-- git status -> rtk git status
-- git diff -> rtk git diff
-- git log -> rtk git log
-- ls -> rtk ls
-- grep -> rtk grep
-- cargo test -> rtk cargo test
-- npm test -> rtk npm test
-
-For commands not supported by RTK, execute them normally.
-
-Do not sacrifice important diagnostic information.
+This `rust` crate is a library of constants used in the [`Chimithèque`](https://github.com/chimitheque/gochimitheque) application.\
 
 ## File protection
 
